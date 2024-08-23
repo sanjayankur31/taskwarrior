@@ -9,10 +9,13 @@ project (task
   HOMEPAGE_URL https://taskwarrior.org/)
 
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${SHARE_INSTALL_PREFIX}/cmake/")
 
 include (FetchContent)
 include (CheckFunctionExists)
 include (CheckStructHasMember)
+
+include (Corrosion)
 
 set (HAVE_CMAKE true)
 
@@ -24,15 +27,6 @@ if (ENABLE_WASM)
   message ("Enabling WASM support.")
   set(CMAKE_EXECUTABLE_SUFFIX ".js")
 endif (ENABLE_WASM)
-
-message ("-- Looking for git submodules")
-if (EXISTS ${CMAKE_SOURCE_DIR}/src/libshared/src AND EXISTS ${CMAKE_SOURCE_DIR}/src/tc/corrosion)
-  message ("-- Found git submodules")
-else (EXISTS ${CMAKE_SOURCE_DIR}/src/libshared/src)
-  message ("-- Cloning git submodules")
-  execute_process (COMMAND git submodule update --init
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-endif (EXISTS ${CMAKE_SOURCE_DIR}/src/libshared/src AND EXISTS ${CMAKE_SOURCE_DIR}/src/tc/corrosion)
 
 message ("-- Looking for SHA1 references")
 if (EXISTS ${CMAKE_SOURCE_DIR}/.git/index)
